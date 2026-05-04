@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f4ed8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Canvas">
+<title>Canvas Assignments</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: #f7f8fa;
+    color: #1a1a1a;
+    line-height: 1.45;
+    padding: 18px 18px 80px;
+  }
+  h1 { font-size: 22px; margin: 0 0 4px; font-weight: 700; }
+  .subtitle { color: #666; font-size: 13px; margin-bottom: 18px; }
+  .refresh-note {
+    background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px;
+    padding: 10px 14px; font-size: 12px; color: #1e3a8a;
+    margin-bottom: 16px;
+  }
+  .toolbar {
+    display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .pill {
+    background: #fff; border: 1px solid #e3e6ea; border-radius: 999px;
+    padding: 5px 12px; font-size: 12px; color: #444; cursor: pointer;
+    user-select: none;
+  }
+  .pill.active { background: #1f4ed8; color: #fff; border-color: #1f4ed8; }
+  .pill:hover:not(.active) { background: #f0f2f6; }
+  .day-group { margin-bottom: 22px; }
+  .day-header {
+    display: flex; align-items: baseline; gap: 10px;
+    margin: 0 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid #e3e6ea;
+  }
+  .day-name { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+  .day-date { font-size: 12px; color: #888; }
+  .day-count { font-size: 11px; color: #666; margin-left: auto; }
+  .assignment {
+    background: #fff; border: 1px solid #e3e6ea; border-radius: 10px;
+    padding: 12px 14px; margin-bottom: 8px;
+    display: grid; grid-template-columns: 6px 1fr auto; gap: 12px;
+    align-items: center;
+    transition: box-shadow 0.15s;
+  }
+  .assignment:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .priority-bar { width: 6px; border-radius: 3px; align-self: stretch; }
+  .priority-critical { background: #dc2626; }
+  .priority-high { background: #f59e0b; }
+  .priority-medium { background: #3b82f6; }
+  .priority-low { background: #94a3b8; }
+  .assignment-info { min-width: 0; }
+  .assignment-title {
+    font-weight: 600; font-size: 14px; color: #1a1a1a;
+    text-decoration: none; display: block; margin-bottom: 3px;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .assignment-title:hover { color: #1f4ed8; text-decoration: underline; }
+  .assignment-meta {
+    font-size: 12px; color: #666;
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .course-tag {
+    display: inline-block; padding: 1px 8px; background: #eef1f6;
+    border-radius: 4px; color: #44546a; font-size: 11px; font-weight: 500;
+  }
+  .points {
+    font-size: 13px; font-weight: 600; color: #1a1a1a;
+    background: #f0f4ff; padding: 4px 10px; border-radius: 6px;
+    white-space: nowrap;
+  }
+  .time-til { font-size: 11px; color: #888; }
+  .empty {
+    text-align: center; padding: 60px 20px; color: #888;
+    background: #fff; border: 1px dashed #d0d4da; border-radius: 12px;
+  }
+  .summary-stats {
+    display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .stat {
+    background: #fff; border: 1px solid #e3e6ea; border-radius: 10px;
+    padding: 10px 14px; flex: 1; min-width: 110px;
+  }
+  .stat-value { font-size: 20px; font-weight: 700; color: #1a1a1a; }
+  .stat-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+  .footer-note {
+    margin-top: 24px; font-size: 11px; color: #999; text-align: center;
+  }
+  details { margin-top: 18px; }
+  summary { cursor: pointer; font-size: 12px; color: #666; }
+  .class-list { font-size: 12px; color: #555; margin-top: 8px; line-height: 1.6; }
+
+  /* No-deadline section */
+  .nd-section { margin-top: 28px; }
+  .nd-header {
+    display: flex; align-items: baseline; gap: 10px;
+    margin: 0 0 10px; padding-bottom: 6px;
+    border-bottom: 2px solid #e3e6ea;
+  }
+  .nd-title { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+  .nd-subtitle { font-size: 12px; color: #888; }
+  .nd-count { font-size: 11px; color: #666; margin-left: auto; }
+  .nd-group-label {
+    font-size: 11px; font-weight: 600; color: #666; text-transform: uppercase;
+    letter-spacing: 0.5px; margin: 14px 0 6px;
+  }
+  .nd-item {
+    background: #fff; border: 1px solid #e3e6ea; border-radius: 8px;
+    padding: 10px 12px; margin-bottom: 6px;
+    display: grid; grid-template-columns: 1fr auto auto; gap: 10px;
+    align-items: center; font-size: 13px;
+  }
+  .nd-item-stale { opacity: 0.7; background: #fafbfc; }
+  .nd-item-title {
+    font-weight: 500; color: #1a1a1a; text-decoration: none;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .nd-item-title:hover { color: #1f4ed8; text-decoration: underline; }
+  .nd-type {
+    font-size: 11px; color: #666; background: #f0f2f6;
+    padding: 2px 7px; border-radius: 4px; white-space: nowrap;
+  }
+  .nd-points {
+    font-size: 12px; color: #666; white-space: nowrap; min-width: 50px; text-align: right;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 520px) {
+    body { padding: 14px 12px 60px; }
+    h1 { font-size: 20px; }
+    .stat { min-width: 0; padding: 8px 10px; }
+    .stat-value { font-size: 18px; }
+    .stat-label { font-size: 10px; }
+    .assignment {
+      grid-template-columns: 4px 1fr;
+      gap: 10px;
+      padding: 11px 12px;
+    }
+    .points {
+      grid-column: 2; justify-self: start;
+      font-size: 12px; padding: 3px 8px;
+      margin-top: 4px;
+    }
+    .assignment-title { font-size: 14px; white-space: normal; }
+    .assignment-meta { font-size: 11px; gap: 6px; }
+    .nd-item {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+    .nd-item-title { white-space: normal; }
+    .nd-type, .nd-points { justify-self: start; }
+    .nd-points { text-align: left; min-width: 0; }
+    .day-header { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+  <h1>Canvas Assignments</h1>
+  <div class="subtitle" id="subtitle"></div>
+
+  <div class="refresh-note">
+    To refresh this dashboard, ask Claude: <em>"Refresh my Canvas assignments."</em>
+  </div>
+
+  <div class="summary-stats" id="stats"></div>
+
+  <div class="toolbar">
+    <span class="pill active" data-sort="date">By date</span>
+    <span class="pill" data-sort="priority">By priority</span>
+    <span class="pill" data-sort="course">By class</span>
+  </div>
+
+  <div id="content"></div>
+
+  <div id="no-deadline"></div>
+
+  <details>
+    <summary>Classes being tracked (8)</summary>
+    <div class="class-list">
+      Advanced ELA 8 · AM1 (P2 &amp; P3) · ASB Leadership · COMP PE ·
+      IS Homeroom 2401 · Science 8 · Social Studies 8 · Thompson Times
+    </div>
+  </details>
+
+  <div class="footer-note" id="footer"></div>
+
+<script>
+// === DATA SNAPSHOT ===
+const SNAPSHOT = {
+  fetched_at: "2026-05-03T17:30:00-07:00",
+  days_ahead: 14,
+  classes_tracked: 8,
+  assignments: [
+    {
+      title: "Rhetorical Analysis (TBITSP Ch. 12)- Requires Respondus LockDown Browser",
+      course: "Advanced ELA 8 2025-2026",
+      due_at: "2026-05-04T20:43:00Z",
+      points: 22,
+      url: "https://murrieta.instructure.com/courses/99972/assignments/1541946",
+      note: "Requires Respondus LockDown Browser"
+    },
+    {
+      title: "Why Here?",
+      course: "Advanced ELA 8 2025-2026",
+      due_at: "2026-05-05T06:59:59Z",
+      points: 15,
+      url: "https://murrieta.instructure.com/courses/99972/assignments/1540068",
+      note: "Student annotation"
+    },
+    {
+      title: "Building Empathy",
+      course: "Advanced ELA 8 2025-2026",
+      due_at: "2026-05-07T06:59:59Z",
+      points: 10,
+      url: "https://murrieta.instructure.com/courses/99972/assignments/1540071",
+      note: "Text entry / file upload"
+    }
+  ],
+  // AM1 Math practice / reference items the teacher posted with no due date
+  no_deadline: [
+    { title: "🌺 A#5: 9.7 --> TEXT", course: "AM1 Math", points: null, type: "Practice", updated: "2026-04-28", url: "https://murrieta.instructure.com/courses/99990/assignments/1362031", recent: true },
+    { title: "🌺 A#2 9.3 - 9.6 Practice pg. 1-2", course: "AM1 Math", points: null, type: "Practice", updated: "2026-04-27", url: "https://murrieta.instructure.com/courses/99990/assignments/1361997", recent: true },
+    { title: "🌺 A#1 Congruency and Isosceles and Equilateral Triangles", course: "AM1 Math", points: null, type: "Practice", updated: "2026-04-23", url: "https://murrieta.instructure.com/courses/99990/assignments/1361975", recent: true },
+    { title: "🌺💻 MASH-UP VIDEO NOTES #4 Proofs", course: "AM1 Math", points: null, type: "Video notes", updated: "2026-04-23", url: "https://murrieta.instructure.com/courses/99990/assignments/1361950", recent: true },
+    { title: "🌺💻 MASH-UP VIDEO NOTES #3 Proofs", course: "AM1 Math", points: null, type: "Video notes", updated: "2026-04-23", url: "https://murrieta.instructure.com/courses/99990/assignments/1361949", recent: true },
+    { title: "🌺💻 MASH-UP VIDEO NOTES #1 and #2 Triangle Congruency Theorems", course: "AM1 Math", points: null, type: "Video notes", updated: "2026-04-23", url: "https://murrieta.instructure.com/courses/99990/assignments/1361951", recent: true },
+    { title: "💻🎦 YouTube VIDEO w. Quiz: EXPONENTIAL FUNCTIONS", course: "AM1 Math", points: 10, type: "Video + quiz", updated: "2025-09-30", url: "https://murrieta.instructure.com/courses/99990/assignments/1361952", recent: false },
+    { title: "Online Assessment Link", course: "AM1 Math", points: 100, type: "Assessment link", updated: "2025-08-05", url: "https://murrieta.instructure.com/courses/99990/assignments/1362133", recent: false },
+    { title: "🦇 A#4 DESMOS - Turtle Crossing", course: "AM1 Math", points: 10, type: "Desmos activity", updated: "2025-08-05", url: "https://murrieta.instructure.com/courses/99990/assignments/1362016", recent: false },
+    { title: "🎉 A#2: Square and Cube Root Functions WKSHT", course: "AM1 Math", points: null, type: "Worksheet", updated: "2025-08-05", url: "https://murrieta.instructure.com/courses/99990/assignments/1362003", recent: false },
+    { title: "(Skip) What is an Exponential Function? Growth, Decay & Graphing", course: "AM1 Math", points: 5, type: "External tool", updated: "2025-08-05", url: "https://murrieta.instructure.com/courses/99990/assignments/1362132", recent: false }
+  ]
+};
+// === END SNAPSHOT ===
+
+let currentSort = "date";
+
+function priorityFor(daysUntil, points) {
+  const p = points || 0;
+  if (daysUntil <= 1 && p >= 15) return "critical";
+  if (daysUntil <= 1) return "high";
+  if (daysUntil <= 3 && p >= 20) return "critical";
+  if (daysUntil <= 3) return "high";
+  if (p >= 30) return "high";
+  if (daysUntil <= 7) return "medium";
+  return "low";
+}
+
+function priorityScore(daysUntil, points) {
+  const p = points || 1;
+  return p / Math.max(0.5, daysUntil);
+}
+
+function fmtDay(date) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const d = new Date(date); d.setHours(0,0,0,0);
+  const diff = Math.round((d - today) / 86400000);
+  if (diff < 0) return "Past due";
+  if (diff === 0) return "Today";
+  if (diff === 1) return "Tomorrow";
+  return d.toLocaleDateString(undefined, { weekday: 'long' });
+}
+
+function fmtDate(date) {
+  return new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
+function fmtTime(date) {
+  return new Date(date).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+}
+
+function timeTil(date) {
+  const ms = new Date(date) - new Date();
+  const hrs = ms / 3600000;
+  if (hrs < 0) return "overdue";
+  if (hrs < 24) return `in ${Math.max(1, Math.round(hrs))}h`;
+  const days = Math.floor(hrs / 24);
+  return `in ${days}d`;
+}
+
+function shortCourse(name) {
+  if (!name) return "";
+  return name
+    .replace(/\s*\d{4}[-/]\d{2,4}.*$/, "")
+    .replace(/-\s*[A-Z]\d+\s*-?\s*[A-Z-]+/g, "")
+    .replace(/-[A-Z][a-z]+,.*$/, "")
+    .trim();
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderItem(a) {
+  const days = (new Date(a.due_at) - new Date()) / 86400000;
+  const pri = priorityFor(days, a.points);
+  const note = a.note ? `<span>${escapeHtml(a.note)}</span>` : "";
+  return `
+    <div class="assignment">
+      <div class="priority-bar priority-${pri}"></div>
+      <div class="assignment-info">
+        <a class="assignment-title" href="${a.url}" target="_blank" rel="noopener">${escapeHtml(a.title)}</a>
+        <div class="assignment-meta">
+          <span class="course-tag">${escapeHtml(shortCourse(a.course))}</span>
+          <span>Due ${fmtTime(a.due_at)}</span>
+          <span class="time-til">${timeTil(a.due_at)}</span>
+          ${note}
+        </div>
+      </div>
+      <div class="points">${a.points ?? "—"} pts</div>
+    </div>`;
+}
+
+function render() {
+  const items = SNAPSHOT.assignments;
+  const stats = document.getElementById("stats");
+  const content = document.getElementById("content");
+
+  if (!items.length) {
+    stats.innerHTML = "";
+    content.innerHTML = `<div class="empty"><div style="font-size:36px">✓</div><div><strong>Nothing due in the next ${SNAPSHOT.days_ahead} days</strong></div><div style="margin-top:6px;font-size:12px">Across all ${SNAPSHOT.classes_tracked} classes</div></div>`;
+    return;
+  }
+
+  const totalPoints = items.reduce((s,a) => s + (a.points || 0), 0);
+  const dueSoon = items.filter(a => ((new Date(a.due_at) - new Date()) / 86400000) <= 2).length;
+  const courses = new Set(items.map(a => a.course)).size;
+  stats.innerHTML = `
+    <div class="stat"><div class="stat-value">${items.length}</div><div class="stat-label">Assignments</div></div>
+    <div class="stat"><div class="stat-value">${dueSoon}</div><div class="stat-label">Due in 2 days</div></div>
+    <div class="stat"><div class="stat-value">${totalPoints}</div><div class="stat-label">Total points</div></div>
+    <div class="stat"><div class="stat-value">${courses}</div><div class="stat-label">Active classes</div></div>
+  `;
+
+  let html = "";
+  if (currentSort === "date") {
+    const byDay = {};
+    for (const a of items) {
+      const dayKey = new Date(a.due_at).toISOString().slice(0,10);
+      (byDay[dayKey] ||= []).push(a);
+    }
+    for (const dayKey of Object.keys(byDay).sort()) {
+      const grp = byDay[dayKey].sort((a,b) => (b.points||0) - (a.points||0));
+      const sample = grp[0].due_at;
+      html += `<div class="day-group">
+        <div class="day-header">
+          <span class="day-name">${fmtDay(sample)}</span>
+          <span class="day-date">${fmtDate(sample)}</span>
+          <span class="day-count">${grp.length} ${grp.length === 1 ? 'item' : 'items'}</span>
+        </div>
+        ${grp.map(renderItem).join("")}
+      </div>`;
+    }
+  } else if (currentSort === "priority") {
+    const sorted = [...items].sort((a,b) => {
+      const da = (new Date(a.due_at) - new Date()) / 86400000;
+      const db = (new Date(b.due_at) - new Date()) / 86400000;
+      return priorityScore(db, b.points) - priorityScore(da, a.points);
+    });
+    html = `<div class="day-group">${sorted.map(renderItem).join("")}</div>`;
+  } else if (currentSort === "course") {
+    const byCourse = {};
+    for (const a of items) (byCourse[a.course] ||= []).push(a);
+    for (const c of Object.keys(byCourse).sort()) {
+      const grp = byCourse[c].sort((a,b) => new Date(a.due_at) - new Date(b.due_at));
+      html += `<div class="day-group">
+        <div class="day-header">
+          <span class="day-name">${escapeHtml(shortCourse(c))}</span>
+          <span class="day-count">${grp.length} ${grp.length === 1 ? 'item' : 'items'}</span>
+        </div>
+        ${grp.map(renderItem).join("")}
+      </div>`;
+    }
+  }
+  content.innerHTML = html;
+
+  renderNoDeadline();
+}
+
+function renderNoDeadline() {
+  const target = document.getElementById("no-deadline");
+  const items = SNAPSHOT.no_deadline || [];
+  if (!items.length) { target.innerHTML = ""; return; }
+
+  const recent = items.filter(i => i.recent);
+  const stale = items.filter(i => !i.recent);
+
+  let html = `
+    <div class="nd-section">
+      <div class="nd-header">
+        <span class="nd-title">No deadline set</span>
+        <span class="nd-subtitle">AM1 Math · ask Mr. Uecke-Barnett if unclear</span>
+        <span class="nd-count">${items.length} items</span>
+      </div>
+  `;
+
+  if (recent.length) {
+    html += `<div class="nd-group-label">Recently posted (current unit)</div>`;
+    html += recent.map(renderNdItem).join("");
+  }
+  if (stale.length) {
+    html += `<div class="nd-group-label" style="margin-top:14px">Older / reference material</div>`;
+    html += stale.map(renderNdItem).join("");
+  }
+  html += `</div>`;
+  target.innerHTML = html;
+}
+
+function renderNdItem(a) {
+  const cls = a.recent ? "nd-item" : "nd-item nd-item-stale";
+  const pts = a.points != null ? `${a.points} pts` : "ungraded";
+  return `
+    <div class="${cls}">
+      <a class="nd-item-title" href="${a.url}" target="_blank" rel="noopener" title="${escapeHtml(a.title)}">${escapeHtml(a.title)}</a>
+      <span class="nd-type">${escapeHtml(a.type)}</span>
+      <span class="nd-points">${pts}</span>
+    </div>`;
+}
+
+// Header bits
+const fetchedDate = new Date(SNAPSHOT.fetched_at);
+document.getElementById("subtitle").textContent =
+  `Next ${SNAPSHOT.days_ahead} days · ${SNAPSHOT.classes_tracked} classes tracked`;
+document.getElementById("footer").textContent =
+  `Snapshot from ${fetchedDate.toLocaleString(undefined, { weekday:'short', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' })}`;
+
+document.querySelectorAll(".pill").forEach(p => {
+  p.addEventListener("click", () => {
+    document.querySelectorAll(".pill").forEach(x => x.classList.remove("active"));
+    p.classList.add("active");
+    currentSort = p.dataset.sort;
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>

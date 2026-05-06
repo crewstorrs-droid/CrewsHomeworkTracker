@@ -195,48 +195,118 @@
 <script>
 // === DATA SNAPSHOT ===
 const SNAPSHOT = {
-  fetched_at: "2026-05-03T17:30:00-07:00",
-  days_ahead: 14,
-  classes_tracked: 8,
-  assignments: [
+  "fetched_at": "2026-05-06T14:08:31.062-07:00",
+  "days_ahead": 14,
+  "classes_tracked": 8,
+  "assignments": [
     {
-      title: "Rhetorical Analysis (TBITSP Ch. 12)- Requires Respondus LockDown Browser",
-      course: "Advanced ELA 8 2025-2026",
-      due_at: "2026-05-04T20:43:00Z",
-      points: 22,
-      url: "https://murrieta.instructure.com/courses/99972/assignments/1541946",
-      note: "Requires Respondus LockDown Browser"
-    },
-    {
-      title: "Why Here?",
-      course: "Advanced ELA 8 2025-2026",
-      due_at: "2026-05-05T06:59:59Z",
-      points: 15,
-      url: "https://murrieta.instructure.com/courses/99972/assignments/1540068",
-      note: "Student annotation"
-    },
-    {
-      title: "Building Empathy",
-      course: "Advanced ELA 8 2025-2026",
-      due_at: "2026-05-07T06:59:59Z",
-      points: 10,
-      url: "https://murrieta.instructure.com/courses/99972/assignments/1540071",
-      note: "Text entry / file upload"
+      "title": "Building Empathy",
+      "course": "Advanced ELA 8",
+      "due_at": "2026-05-07T06:59:59Z",
+      "points": 10,
+      "url": "https://murrieta.instructure.com/courses/99972/assignments/1540071"
     }
   ],
-  // AM1 Math practice / reference items the teacher posted with no due date
-  no_deadline: [
-    { title: "🌺 A#5: 9.7 --> TEXT", course: "AM1 Math", points: null, type: "Practice", updated: "2026-04-28", url: "https://murrieta.instructure.com/courses/99990/assignments/1362031", recent: true },
-    { title: "🌺 A#2 9.3 - 9.6 Practice pg. 1-2", course: "AM1 Math", points: null, type: "Practice", updated: "2026-04-27", url: "https://murrieta.instructure.com/courses/99990/assignments/1361997", recent: true },
-    { title: "🌺 A#1 Congruency and Isosceles and Equilateral Triangles", course: "AM1 Math", points: null, type: "Practice", updated: "2026-04-23", url: "https://murrieta.instructure.com/courses/99990/assignments/1361975", recent: true },
-    { title: "🌺💻 MASH-UP VIDEO NOTES #4 Proofs", course: "AM1 Math", points: null, type: "Video notes", updated: "2026-04-23", url: "https://murrieta.instructure.com/courses/99990/assignments/1361950", recent: true },
-    { title: "🌺💻 MASH-UP VIDEO NOTES #3 Proofs", course: "AM1 Math", points: null, type: "Video notes", updated: "2026-04-23", url: "https://murrieta.instructure.com/courses/99990/assignments/1361949", recent: true },
-    { title: "🌺💻 MASH-UP VIDEO NOTES #1 and #2 Triangle Congruency Theorems", course: "AM1 Math", points: null, type: "Video notes", updated: "2026-04-23", url: "https://murrieta.instructure.com/courses/99990/assignments/1361951", recent: true },
-    { title: "💻🎦 YouTube VIDEO w. Quiz: EXPONENTIAL FUNCTIONS", course: "AM1 Math", points: 10, type: "Video + quiz", updated: "2025-09-30", url: "https://murrieta.instructure.com/courses/99990/assignments/1361952", recent: false },
-    { title: "Online Assessment Link", course: "AM1 Math", points: 100, type: "Assessment link", updated: "2025-08-05", url: "https://murrieta.instructure.com/courses/99990/assignments/1362133", recent: false },
-    { title: "🦇 A#4 DESMOS - Turtle Crossing", course: "AM1 Math", points: 10, type: "Desmos activity", updated: "2025-08-05", url: "https://murrieta.instructure.com/courses/99990/assignments/1362016", recent: false },
-    { title: "🎉 A#2: Square and Cube Root Functions WKSHT", course: "AM1 Math", points: null, type: "Worksheet", updated: "2025-08-05", url: "https://murrieta.instructure.com/courses/99990/assignments/1362003", recent: false },
-    { title: "(Skip) What is an Exponential Function? Growth, Decay & Graphing", course: "AM1 Math", points: 5, type: "External tool", updated: "2025-08-05", url: "https://murrieta.instructure.com/courses/99990/assignments/1362132", recent: false }
+  "no_deadline": [
+    {
+      "title": "🌺 A#5: 9.7 --> TEXT",
+      "course": "AM1 Math",
+      "points": null,
+      "type": "Practice",
+      "updated": "2026-04-28",
+      "url": "https://murrieta.instructure.com/courses/99990/assignments/1362031",
+      "recent": true
+    },
+    {
+      "title": "🌺 A#2 9.3 - 9.6 Practice pg. 1-2",
+      "course": "AM1 Math",
+      "points": null,
+      "type": "Practice",
+      "updated": "2026-04-27",
+      "url": "https://murrieta.instructure.com/courses/99990/assignments/1361997",
+      "recent": true
+    },
+    {
+      "title": "🌺 A#1--> Congruency and Isosceles and Equilateral Triangles",
+      "course": "AM1 Math",
+      "points": null,
+      "type": "Practice",
+      "updated": "2026-04-23",
+      "url": "https://murrieta.instructure.com/courses/99990/assignments/1361975",
+      "recent": true
+    },
+    {
+      "title": "🌺💻 MASH-UP VIDEO NOTES #4 Proofs",
+      "course": "AM1 Math",
+      "points": null,
+      "type": "Practice",
+      "updated": "2026-04-23",
+      "url": "https://murrieta.instructure.com/courses/99990/assignments/1361950",
+      "recent": true
+    },
+    {
+      "title": "🌺💻 MASH-UP VIDEO NOTES #3 Proofs",
+      "course": "AM1 Math",
+      "points": null,
+      "type": "Practice",
+      "updated": "2026-04-23",
+      "url": "https://murrieta.instructure.com/courses/99990/assignments/1362013",
+      "recent": true
+    },
+    {
+      "title": "🌺💻 MASH-UP VIDEO NOTES: #1 and #2 Triangle Congruency Theorems",
+      "course": "AM1 Math",
+      "points": null,
+      "type": "Practice",
+      "updated": "2026-04-23",
+      "url": "https://murrieta.instructure.com/courses/99990/assignments/1361939",
+      "recent": true
+    },
+    {
+      "title": "💻🎦 YouTube VIDEO w. Quiz:  EXPONENTIAL FUNCTIONS",
+      "course": "AM1 Math",
+      "points": null,
+      "type": "Practice",
+      "updated": "2025-09-30",
+      "url": "https://murrieta.instructure.com/courses/99990/assignments/1362000",
+      "recent": false
+    },
+    {
+      "title": "NOT THIS ONE What is an Exponential Function? (Exponential Growth, Decay & Graphing).",
+      "course": "AM1 Math",
+      "points": null,
+      "type": "Practice",
+      "updated": "2025-08-05",
+      "url": "https://murrieta.instructure.com/courses/99990/assignments/1361967",
+      "recent": false
+    },
+    {
+      "title": "Online Assessment Link",
+      "course": "AM1 Math",
+      "points": null,
+      "type": "Practice",
+      "updated": "2025-08-05",
+      "url": "https://murrieta.instructure.com/courses/99990/assignments/1361926",
+      "recent": false
+    },
+    {
+      "title": "🦇 A#4 DESMOS- Turtle Crossing",
+      "course": "AM1 Math",
+      "points": null,
+      "type": "Practice",
+      "updated": "2025-08-05",
+      "url": "https://murrieta.instructure.com/courses/99990/assignments/1361961",
+      "recent": false
+    },
+    {
+      "title": "🎉 A#2: Square and Cube Root Functions--WKSHT",
+      "course": "AM1 Math",
+      "points": null,
+      "type": "Practice",
+      "updated": "2025-08-05",
+      "url": "https://murrieta.instructure.com/courses/99990/assignments/1361983",
+      "recent": false
+    }
   ]
 };
 // === END SNAPSHOT ===
